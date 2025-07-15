@@ -241,24 +241,44 @@ const Acceuil = () => {
             {[0, 1, 2, 3].map((offset) => {
               const prod = products[(startIndex + offset) % products.length];
               return (
-                <div key={offset} className="flex flex-col items-start bg-white p-4 w-full sm:w-44">
-                  <Image src={prod.image} alt={prod.name} width={112} height={112} className="w-24 h-24 sm:w-28 sm:h-28 object-contain mb-2" />
-                  <h3 className="mt-2 font-semibold text-center text-sm w-full">{prod.name}</h3>
-                  <p className="text-gray-500 text-sm text-center">{prod.desc}</p>
-                  <div className="flex items-center mt-2">
-                    {[...Array(5)].map((_, i) => (
-                      <FaStar key={i} className="text-yellow-400 w-4 h-4" />
-                    ))}
-                    <span className="text-sm text-gray-600 ml-2">2 avis</span>
-                  </div>
-                  <div className="mt-2">
-                    <span className="text-green-600 font-bold mr-2">{prod.newPrice}f</span>
-                    <span className="line-through text-gray-400">{prod.oldPrice}f</span>
-                  </div>
-                  <button className="bg-green-600 text-white py-2 rounded hover:bg-green-700 w-full">
-                    Ajouter au panier
-                  </button>
-                </div>
+                <div
+  key={offset}
+  className="flex flex-col justify-between items-stretch border rounded-lg shadow p-4 bg-white w-full sm:w-44 h-full"
+>
+  <div className="flex flex-col flex-1">
+    <div className="flex justify-center">
+      <Image
+        src={prod.image}
+        alt={prod.name}
+        width={112}
+        height={112}
+        className="w-24 h-24 sm:w-28 sm:h-28 object-contain mb-2"
+      />
+    </div>
+
+    <h3 className="font-semibold text-center text-sm w-full min-h-[2rem]">{prod.name}</h3>
+
+    <p className="text-gray-500 text-sm text-center min-h-[3rem]">{prod.desc}</p>
+
+    <div className="flex items-center justify-center mt-2 min-h-[1.5rem]">
+      {[...Array(5)].map((_, i) => (
+        <FaStar key={i} className="text-yellow-400 w-4 h-4" />
+      ))}
+      <span className="text-sm text-gray-600 ml-2">2 avis</span>
+    </div>
+
+    <div className="mt-2 flex justify-center items-center gap-2 min-h-[1.5rem]">
+      <span className="text-green-600 font-bold">{prod.newPrice}f</span>
+      <span className="line-through text-gray-400">{prod.oldPrice}f</span>
+    </div>
+  </div>
+
+  <button className="bg-green-600 text-white py-2 mt-4 rounded hover:bg-green-700 w-full">
+    Ajouter au panier
+  </button>
+</div>
+
+
               );
             })}
           </div>
@@ -351,7 +371,7 @@ const Acceuil = () => {
 
       {/* Carrousel Recommandés pour vous */}
       <div className="relative bg-white py-8">
-        <div className="flex items-center justify-between max-w-7xl mx-auto">
+        <div className="flex items-center justify-between max-w-7xl  mx-auto">
           {/* Flèche gauche */}
           <button onClick={handlePrevRecommande} className="p-2 bg-white rounded-full shadow hover:bg-gray-100">
             <IoIosArrowBack size={28} className="text-green-700" />
@@ -361,7 +381,7 @@ const Acceuil = () => {
             {[...Array(visibleCount)].map((_, offset) => {
               const prod = produitsRecommandes[(startIndexRecommande + offset) % produitsRecommandes.length];
               return (
-                <div key={offset} className="flex flex-col items-start bg-white p-4 w-full sm:w-44">
+                <div key={offset} className="flex flex-col items-start border rounded-lg shadow p-4 bg-white p-4 w-full sm:w-44">
                   <Image src={prod.image} alt={prod.name} width={112} height={112} className="w-24 h-24 sm:w-28 sm:h-28 object-contain mb-2" />
                   <h3 className="mt-2 font-semibold text-center text-sm w-full">{prod.name}</h3>
                   <div className="flex items-center mt-2">
@@ -382,9 +402,12 @@ const Acceuil = () => {
             })}
           </div>
           {/* Flèche droite */}
-          <button onClick={handleNextRecommande} className="p-2 bg-white rounded-full shadow hover:bg-gray-100">
-            <IoIosArrowForward size={28} className="text-green-700" />
-          </button>
+          <button
+  onClick={handleNextRecommande}
+  className="p-2 bg-white rounded-full shadow hover:bg-gray-100 ml-4" // ← ajoute ml-4 ou plus
+>
+  <IoIosArrowForward size={28} className="text-green-700" />
+</button>
         </div>
       </div>
       
@@ -406,27 +429,59 @@ const Acceuil = () => {
             {[...Array(visibleCountSelection)].map((_, offset) => {
               const prod = selectionMoment[(startIndexSelection + offset) % selectionMoment.length];
               return (
-                <div key={offset} className="flex flex-col items-center bg-white p-4 w-full sm:w-44 flex-1">
-                  <Image src={prod.image} alt={prod.name} width={144} height={144} className="w-24 h-24 sm:w-36 sm:h-36 object-contain mb-2" />
-                  <h3 className="font-semibold text-center text-sm w-full mb-2 leading-tight">{prod.name}</h3>
-                  <div className="flex items-center justify-center w-full mb-2">
-                    {[...Array(5)].map((_, i) =>
-                      i < prod.rating
-                        ? <FaStar key={i} className="text-yellow-400 w-5 h-5" />
-                        : <FaRegStar key={i} className="text-yellow-400 w-5 h-5" />
-                    )}
-                  </div>
-                  <div className="font-bold w-full text-center mb-4 text-base">{prod.price}f</div>
-                  <p className="text-gray-500 text-xs text-center mb-2 w-full">{prod.desc}</p>
-                  <button className="bg-green-700 text-white py-2 rounded hover:bg-green-900 w-full text-sm font-semibold mt-auto">Ajouter au panier</button>
-                </div>
+                <div
+  key={offset}
+  className="flex flex-col items-center border rounded-lg shadow p-4 bg-white w-full sm:w-44 flex-1"
+>
+  <Image
+    src={prod.image}
+    alt={prod.name}
+    width={144}
+    height={144}
+    className="w-24 h-24 sm:w-36 sm:h-36 object-contain mb-2"
+  />
+
+  {/* Titre avec hauteur fixe */}
+  <h3 className="font-semibold text-center text-sm w-full mb-2 leading-tight min-h-[3rem]">
+    {prod.name}
+  </h3>
+
+  {/* Étoiles avec hauteur fixe */}
+  <div className="flex items-center justify-center w-full mb-2 min-h-[1.5rem]">
+    {[...Array(5)].map((_, i) =>
+      i < prod.rating ? (
+        <FaStar key={i} className="text-yellow-400 w-5 h-5" />
+      ) : (
+        <FaRegStar key={i} className="text-yellow-400 w-5 h-5" />
+      )
+    )}
+  </div>
+
+  {/* Prix avec hauteur fixe */}
+  <div className="font-bold w-full text-center mb-4 text-base min-h-[1.5rem]">
+    {prod.price}f
+  </div>
+
+  {/* Description avec hauteur fixe */}
+  <p className="text-gray-500 text-xs text-center mb-2 w-full min-h-[3rem]">
+    {prod.desc}
+  </p>
+
+  <button className="bg-green-700 text-white py-2 rounded hover:bg-green-900 w-full text-sm font-semibold mt-auto">
+    Ajouter au panier
+  </button>
+</div>
+
               );
             })}
           </div>
           {/* Flèche droite */}
-          <button onClick={handleNextSelection} className="p-2 bg-white rounded-full shadow hover:bg-gray-100">
-            <IoIosArrowForward size={28} className="text-green-700" />
-          </button>
+          <button
+  onClick={handleNextRecommande}
+  className="p-2 bg-white rounded-full shadow hover:bg-gray-100 ml-4" // ← ajoute ml-4 ou plus
+>
+  <IoIosArrowForward size={28} className="text-green-700" />
+</button>
         </div>
       </div>
 
