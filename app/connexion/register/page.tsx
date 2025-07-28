@@ -1,147 +1,245 @@
 'use client';
-import { useState } from 'react';
-import { useRouter } from 'next/navigation';
-import Link from 'next/link';
+import React, { useState } from "react";
+import Link from "next/link";
+import { FaArrowLeft, FaEye, FaEyeSlash } from 'react-icons/fa';
 
-export default function Register() {
-  const router = useRouter();
-  const [formData, setFormData] = useState({
-    nom: '',
-    prenom: '',
-    email: '',
-    password: '',
-    confirmPassword: ''
-  });
+const RegisterPage = () => {
+  const [nom, setNom] = useState('');
+  const [prenom, setPrenom] = useState('');
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
+  const [confirmPassword, setConfirmPassword] = useState('');
+  const [showPassword, setShowPassword] = useState(false);
+  const [showConfirmPassword, setShowConfirmPassword] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
+  const [error, setError] = useState('');
+  const [fullName, setFullName] = useState('');
+  const [currency, setCurrency] = useState('');
+  const [birthday, setBirthday] = useState('');
+  const [acceptPromo, setAcceptPromo] = useState(false);
+  const [acceptTerms, setAcceptTerms] = useState(false);
+  const [activeTab, setActiveTab] = useState<'client' | 'new'>('new');
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    // Logique d'inscription à implémenter
-    console.log('Inscription avec:', formData);
+    setError('');
+    if (!acceptTerms) {
+      setError('Vous devez accepter les conditions générales.');
+      return;
+    }
+    setIsLoading(true);
+
+    if (password !== confirmPassword) {
+      setError('Les mots de passe ne correspondent pas.');
+      setIsLoading(false);
+      return;
+    }
+
+    try {
+      // Simulation d'une requête API
+      await new Promise(resolve => setTimeout(resolve, 2000));
+      // Ici vous pouvez ajouter votre logique d'inscription
+      console.log('Inscription avec:', { fullName, email, currency, password, birthday, acceptPromo, acceptTerms });
+      // Redirection ou gestion de l'inscription
+    } catch (err) {
+      setError('Une erreur est survenue. Veuillez réessayer.');
+    } finally {
+      setIsLoading(false);
+    }
   };
 
   return (
-    <div className="min-h-screen bg-gray-100 flex flex-col justify-center py-12 sm:px-6 lg:px-8">
-      <div className="sm:mx-auto sm:w-full sm:max-w-md">
-        <h2 className="mt-6 text-center text-3xl font-extrabold text-gray-900">
-          Créer un compte
+    <div className="min-h-screen bg-white flex flex-col justify-center items-center relative">
+      <div className="text-center max-w-md px-6">
+        <h2 className="text-3xl font-bold text-black mb-6 mt-4">
+          Création de compte
         </h2>
-      </div>
+        <div className="bg-white p-8 shadow-lg border border-gray-100">
+          <h3 className="text-2xl font-bold text-black mb-6">
+            Bienvenue chez Flowa
+          </h3>
 
-      <div className="mt-8 sm:mx-auto sm:w-full sm:max-w-md">
-        <div className="bg-white py-8 px-4 shadow sm:rounded-lg sm:px-10">
+          {/* Sélection du type de client */}
+          <div className="flex mb-6 bg-gray-100 p-1 rounded-md">
+            <button
+              type="button"
+              className={`flex-1 py-1 px-2 font-medium text-sm h-9 rounded transition-colors duration-150 ${activeTab === 'client' ? 'bg-green-600 text-white' : 'bg-white text-black'}`}
+              onClick={() => setActiveTab('client')}
+            >
+              Déjà client(e) ?
+            </button>
+            <button
+              type="button"
+              className={`flex-1 py-1 px-2 font-medium text-sm h-9 rounded transition-colors duration-150 ${activeTab === 'new' ? 'bg-green-600 text-white' : 'bg-white text-black'}`}
+              onClick={() => setActiveTab('new')}
+            >
+              Pas encore client(e) ?
+            </button>
+          </div>
+
           <form className="space-y-6" onSubmit={handleSubmit}>
             <div>
-              <label htmlFor="nom" className="block text-sm font-medium text-gray-700">
-                Nom
-              </label>
-              <div className="mt-1">
-                <input
-                  id="nom"
-                  name="nom"
-                  type="text"
-                  required
-                  className="appearance-none block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-green-500 focus:border-green-500"
-                  value={formData.nom}
-                  onChange={(e) => setFormData({...formData, nom: e.target.value})}
-                />
-              </div>
+              <input
+                id="fullName"
+                name="fullName"
+                type="text"
+                required
+                className="w-full px-3 py-2 border border-gray-300 focus:outline-none focus:ring-2 focus:ring-green-500 bg-white text-black"
+                placeholder="Nom et prénoms *"
+                value={fullName}
+                onChange={(e) => setFullName(e.target.value)}
+                disabled={isLoading}
+              />
             </div>
-
             <div>
-              <label htmlFor="prenom" className="block text-sm font-medium text-gray-700">
-                Prénom
-              </label>
-              <div className="mt-1">
-                <input
-                  id="prenom"
-                  name="prenom"
-                  type="text"
-                  required
-                  className="appearance-none block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-green-500 focus:border-green-500"
-                  value={formData.prenom}
-                  onChange={(e) => setFormData({...formData, prenom: e.target.value})}
-                />
-              </div>
+              <input
+                id="email"
+                name="email"
+                type="email"
+                autoComplete="email"
+                required
+                className="w-full px-3 py-2 border border-gray-300 focus:outline-none focus:ring-2 focus:ring-green-500 bg-white text-black"
+                placeholder="Email *"
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
+                disabled={isLoading}
+              />
             </div>
-
-            <div>
-              <label htmlFor="email" className="block text-sm font-medium text-gray-700">
-                Adresse email
-              </label>
-              <div className="mt-1">
-                <input
-                  id="email"
-                  name="email"
-                  type="email"
-                  autoComplete="email"
-                  required
-                  className="appearance-none block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-green-500 focus:border-green-500"
-                  value={formData.email}
-                  onChange={(e) => setFormData({...formData, email: e.target.value})}
-                />
-              </div>
-            </div>
-
-            <div>
-              <label htmlFor="password" className="block text-sm font-medium text-gray-700">
-                Mot de passe
-              </label>
-              <div className="mt-1">
-                <input
-                  id="password"
-                  name="password"
-                  type="password"
-                  autoComplete="new-password"
-                  required
-                  className="appearance-none block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-green-500 focus:border-green-500"
-                  value={formData.password}
-                  onChange={(e) => setFormData({...formData, password: e.target.value})}
-                />
-              </div>
-            </div>
-
-            <div>
-              <label htmlFor="confirmPassword" className="block text-sm font-medium text-gray-700">
-                Confirmer le mot de passe
-              </label>
-              <div className="mt-1">
-                <input
-                  id="confirmPassword"
-                  name="confirmPassword"
-                  type="password"
-                  autoComplete="new-password"
-                  required
-                  className="appearance-none block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-green-500 focus:border-green-500"
-                  value={formData.confirmPassword}
-                  onChange={(e) => setFormData({...formData, confirmPassword: e.target.value})}
-                />
-              </div>
-            </div>
-
-            <div>
-              <button
-                type="submit"
-                className="w-full flex justify-center py-2 px-4 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-green-600 hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-green-500"
+            <div className="relative">
+              <select
+                id="currency"
+                name="currency"
+                required
+                className={`w-full px-3 py-2 border border-gray-300 focus:outline-none focus:ring-2 focus:ring-green-500 bg-white appearance-none ${!currency ? 'text-gray-400' : 'text-black'}`}
+                value={currency}
+                onChange={(e) => setCurrency(e.target.value)}
+                disabled={isLoading}
               >
-                S'inscrire
+                <option value="" disabled className="text-gray-400">Devise *</option>
+                <option value="EUR">EUR</option>
+                <option value="USD">USD</option>
+                <option value="FCFA">FCFA</option>
+              </select>
+              {/* Chevron */}
+              <span className="pointer-events-none absolute inset-y-0 right-0 flex items-center pr-3">
+                <svg className="h-5 w-5 text-gray-400" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" d="M19 9l-7 7-7-7" />
+                </svg>
+              </span>
+            </div>
+            <div className="relative">
+              <input
+                id="password"
+                name="password"
+                type={showPassword ? "text" : "password"}
+                autoComplete="new-password"
+                required
+                className="w-full px-3 py-2 border border-gray-300 focus:outline-none focus:ring-2 focus:ring-green-500 pr-10 bg-white text-black"
+                placeholder="Mot de passe *"
+                value={password}
+                onChange={(e) => setPassword(e.target.value)}
+                disabled={isLoading}
+              />
+              <button
+                type="button"
+                className="absolute inset-y-0 right-0 pr-3 flex items-center"
+                onClick={() => setShowPassword(!showPassword)}
+                tabIndex={-1}
+              >
+                {showPassword ? (
+                  <FaEyeSlash className="h-4 w-4 text-gray-400" />
+                ) : (
+                  <FaEye className="h-4 w-4 text-gray-400" />
+                )}
               </button>
             </div>
+            <div className="relative">
+              <input
+                id="confirmPassword"
+                name="confirmPassword"
+                type={showConfirmPassword ? "text" : "password"}
+                autoComplete="new-password"
+                required
+                className="w-full px-3 py-2 border border-gray-300 focus:outline-none focus:ring-2 focus:ring-green-500 pr-10 bg-white text-black"
+                placeholder="Confirmer votre mot de passe *"
+                value={confirmPassword}
+                onChange={(e) => setConfirmPassword(e.target.value)}
+                disabled={isLoading}
+              />
+              <button
+                type="button"
+                className="absolute inset-y-0 right-0 pr-3 flex items-center"
+                onClick={() => setShowConfirmPassword(!showConfirmPassword)}
+                tabIndex={-1}
+              >
+                {showConfirmPassword ? (
+                  <FaEyeSlash className="h-4 w-4 text-gray-400" />
+                ) : (
+                  <FaEye className="h-4 w-4 text-gray-400" />
+                )}
+              </button>
+            </div>
+            <div>
+              <label className="block text-black font-medium mb-1">Recevez un cadeau le jour de votre anniversaire</label>
+              <input
+                id="birthday"
+                name="birthday"
+                type="date"
+                required
+                className="w-full px-3 py-2 border border-gray-300 focus:outline-none focus:ring-2 focus:ring-green-500 bg-white text-black"
+                placeholder="Entrez votre date de naissance *"
+                value={birthday}
+                onChange={(e) => setBirthday(e.target.value)}
+                disabled={isLoading}
+              />
+            </div>
+            <div className="flex flex-col gap-2 mt-2">
+              <label className="flex items-center text-sm text-black">
+                <input
+                  type="checkbox"
+                  checked={acceptPromo}
+                  onChange={() => setAcceptPromo(!acceptPromo)}
+                  className="mr-2 accent-green-600 w-5 h-5 border-2 border-green-600 focus:ring-2 focus:ring-green-500"
+                  disabled={isLoading}
+                />
+                Je souhaite recevoir par email les actualités promotionnelles, les offres et conseils de Jardin et Saisons
+              </label>
+              <label className="flex items-center text-sm text-black">
+                <input
+                  type="checkbox"
+                  checked={acceptTerms}
+                  onChange={() => setAcceptTerms(!acceptTerms)}
+                  className="mr-2 accent-green-600 w-5 h-5 border-2 border-green-600 focus:ring-2 focus:ring-green-500"
+                  required
+                  disabled={isLoading}
+                />
+                J'accepte les conditions générales et la politique de confidentialité
+              </label>
+            </div>
+            {error && (
+              <p className="text-red-600 text-sm">{error}</p>
+            )}
+            <button
+              type="submit"
+              disabled={isLoading}
+              className="w-full py-2 px-4 bg-green-600 hover:bg-green-700 text-white font-medium text-lg focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-green-500 disabled:opacity-50 disabled:cursor-not-allowed mt-2"
+            >
+              {isLoading ? "Inscription en cours..." : "Je crée mon compte"}
+            </button>
           </form>
 
-          <div className="mt-6">
-            <div className="relative">
-              <div className="relative flex justify-center text-sm">
-                <span className="px-2 bg-white text-gray-500">
-                  Déjà un compte ?{' '}
-                  <Link href="/connexion" className="font-medium text-green-600 hover:text-green-500">
-                    Se connecter
-                  </Link>
-                </span>
-              </div>
-            </div>
+          <div className="mt-6 text-center">
+            <p className="text-black text-base">
+              Déjà un compte ?{" "}
+              <Link href="/connexion" className="text-green-600 hover:text-green-700 font-medium">
+                Connectez-vous
+              </Link>
+            </p>
           </div>
         </div>
       </div>
     </div>
   );
-} 
+};
+
+export default RegisterPage; 

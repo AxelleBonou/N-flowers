@@ -10,8 +10,8 @@ const Footer = () => {
   return (
     <footer className="bg-white">
       {/* Services Section */}
-      <div className="bg-green-100 py-12">
-        <div className="container mx-auto px-4">
+      <div className="bg-green-100 py-12 px-16 lg:px-24">
+        <div className="container mx-auto">
           <div className="grid grid-cols-1 md:grid-cols-4 gap-8">
             <div className="text-center">
               <div className="bg-white rounded-full w-16 h-16 flex items-center justify-center mx-auto mb-4">
@@ -103,8 +103,8 @@ const Footer = () => {
       </div>
 
       {/* Links Section */}
-      <div className="bg-green-900 text-white py-12">
-        <div className="container mx-auto px-4">
+      <div className="bg-green-900 text-white py-12 px-16 lg:px-24">
+        <div className="container mx-auto">
           <div className="grid grid-cols-1 md:grid-cols-4 gap-8">
             <div>
               <h4 className="font-bold mb-4">Mentions légales</h4>
@@ -156,9 +156,8 @@ const Footer = () => {
       </div>
 
       {/* Bottom Section */}
-      <div className="bg-green-900 border-t border-green-800 py-6">
-        <div className="container mx-auto px-4">
-          <div className="flex flex-col md:flex-row justify-between items-center gap-4">
+      <div className="bg-green-900 border-t border-green-800 py-6 px-16 lg:px-24">
+        <div className="flex flex-col md:flex-row justify-between items-center gap-4">
             <div className="flex items-center gap-2">
               <span className="text-white">
                 Disponible du lundi au vendredi de 9h00 à 18h00
@@ -194,7 +193,6 @@ const Footer = () => {
           <div className="text-center mt-6 text-white text-sm">
             <p>Copyright © 2024flower | Tous droits réservés</p>
           </div>
-        </div>
       </div>
     </footer>
   );
