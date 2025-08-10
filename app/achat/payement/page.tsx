@@ -7,7 +7,7 @@ const paymentMethods = [
   {
     id: "paypal",
     label: "Payer avec un compte PayPal",
-    logo: "/paypal.png", // Mets le bon chemin de ton image
+    logo: "/paypal.png", 
   },
   {
     id: "visa",
@@ -33,7 +33,41 @@ const paymentMethods = [
 
 export default function Paiement() {
   const [selected, setSelected] = useState("paypal");
+  const [isProcessing, setIsProcessing] = useState(false);
   const router = useRouter();
+
+  const handlePayment = async () => {
+    setIsProcessing(true);
+    
+    try {
+      switch (selected) {
+        case "paypal":
+          // Rediriger vers PayPal
+          window.open("https://www.paypal.com/pay", "_blank");
+          break;
+          
+        case "visa":
+        case "mastercard":
+        case "cb":
+          // Rediriger vers la page de paiement par carte
+          router.push("/achat/paiement-carte");
+          break;
+          
+        case "momo":
+          // Rediriger vers la page de paiement MoMo
+          router.push("/achat/paiement-momo");
+          break;
+          
+        default:
+          alert("Méthode de paiement non supportée");
+      }
+    } catch (error) {
+      console.error("Erreur lors du paiement:", error);
+      alert("Erreur lors du traitement du paiement");
+    } finally {
+      setIsProcessing(false);
+    }
+  };
 
   return (
     <div className="max-w-xl mx-auto mt-10 p-6">
@@ -89,10 +123,15 @@ export default function Paiement() {
           <span className="text-xl mr-2">&larr;</span>Retour
         </button>
         <button
-          className="bg-green-600 hover:bg-green-700 text-white px-8 py-2 rounded font-semibold text-base"
-          onClick={() => alert(`Paiement par ${selected}`)}
+          className={`px-8 py-2 rounded font-semibold text-base ${
+            isProcessing 
+              ? 'bg-gray-400 cursor-not-allowed' 
+              : 'bg-green-600 hover:bg-green-700'
+          } text-white`}
+          onClick={handlePayment}
+          disabled={isProcessing}
         >
-          Acheter
+          {isProcessing ? 'Traitement...' : 'Acheter'}
         </button>
       </div>
     </div>

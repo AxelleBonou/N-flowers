@@ -46,7 +46,7 @@ export default function MotDePasseOublie() {
         .then((response) => {
           console.log(JSON.stringify(response.data));
           // Ici vous pouvez gérer la réponse, par exemple afficher un message de succès
-          window.location.href = "/connexion"; // Redirection vers la page de connexion
+          window.location.href = "/connexion/forgotanswer"; // Redirection vers la page de connexion
         })
         .catch((error) => {
           if (error.response) {

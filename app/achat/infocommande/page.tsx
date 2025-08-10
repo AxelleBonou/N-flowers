@@ -33,13 +33,28 @@ const InfoCommande = () => {
     }
     setLoading(true);
     try {
-      const res = await fetch("/api/commande/adresse", {
+      const token = localStorage.getItem("token");
+      if (token) {
+        console.log(JSON.parse(token));
+      }
+      const res = await fetch("http://localhost:3032/v1/address", {
         method: "POST",
-        headers: { "Content-Type": "application/json" },
+        headers: { 
+          "Content-Type": "application/json",
+          "Authorization": `Bearer ${token ? JSON.parse(token) : ""}`
+
+        },
         body: JSON.stringify(form),
       });
-      if (!res.ok) throw new Error("Erreur lors de l'enregistrement");
-      router.push("/achat/confirmadrsse");
+      if (!res.ok) {
+        if (res.status == 401) {
+          // Rediriger vers la page de connexion avec un message
+          router.push("/connexion?message=Vous devez être connecté pour continuer");
+          return;
+        }
+        throw new Error("Erreur lors de l'enregistrement");
+      }
+      router.push("/achat/confirmadrsse"); 
     } catch (err: any) {
       setError(err.message || "Erreur inconnue");
     } finally {

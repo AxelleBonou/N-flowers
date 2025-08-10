@@ -1,9 +1,8 @@
 'use client';
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import Link from "next/link";
 import { FaArrowLeft, FaEye, FaEyeSlash } from 'react-icons/fa';
 import axios from "axios";
-import { useSearchParams } from "next/navigation";
 
 const ConnexionPage = () => {
   const [email, setEmail] = useState('');
@@ -12,14 +11,6 @@ const ConnexionPage = () => {
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState('');
   const [activeTab, setActiveTab] = useState<'client' | 'new'>('client');
-  const searchParams = useSearchParams();
-
-  useEffect(() => {
-    const message = searchParams.get('message');
-    if (message) {
-      setError(message);
-    }
-  }, [searchParams]);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -57,11 +48,10 @@ const ConnexionPage = () => {
       };
 
       axios.request(config)
-      .then((response: any) => {
+      .then((response) => {
         console.log(JSON.stringify(response.data));
         // Stocker les infos utilisateur dans le localStorage ou context
         localStorage.setItem('user', JSON.stringify(response.data));
-        localStorage.setItem('token', JSON.stringify(response.data?.data?.token));
         // Redirection vers la page d'accueil ou dashboard après connexion réussie
         window.location.href = "/"; // Remplacez par la route de votre choix
       })
@@ -99,40 +89,7 @@ const ConnexionPage = () => {
           </h3>
 
           {/* Sélection du type de client */}
-          <div className="flex mb-6 bg-gray-100 p-1 rounded-md">
-            <button
-              type="button"
-              className={`flex-1 py-1 px-2 font-medium text-sm h-9 rounded transition-colors duration-150 ${activeTab === 'client' ? 'bg-green-600 text-white' : 'bg-white text-black'}`}
-              onClick={() => setActiveTab('client')}
-            >
-              Déjà client(e) ?
-            </button>
-            <button
-              type="button"
-              className={`flex-1 py-1 px-2 font-medium text-sm h-9 rounded transition-colors duration-150 ${activeTab === 'new' ? 'bg-green-600 text-white' : 'bg-white text-black'}`}
-              onClick={() => setActiveTab('new')}
-            >
-              Pas encore client(e) ?
-            </button>
-          </div>
-
-          {/* Formulaires selon l'onglet sélectionné */}
-          {activeTab === 'client' ? (
-            <form className="space-y-6" onSubmit={handleSubmit}>
-              <div>
-                <input
-                  id="email"
-                  name="email"
-                  type="email"
-                  autoComplete="email"
-                  required
-                  className="w-full px-3 py-2 border border-gray-300 focus:outline-none focus:ring-2 focus:ring-green-500"
-                  placeholder="Email *"
-                  value={email}
-                  onChange={(e) => setEmail(e.target.value)}
-                  disabled={isLoading}
-                />
-              </div>
+        
 
               <div className="relative">
                 <input
@@ -164,14 +121,7 @@ const ConnexionPage = () => {
                 <p className="text-red-600 text-sm">{error}</p>
               )}
 
-              <div className="flex justify-end">
-                <Link 
-                  href="/mot-de-passe-oublie" 
-                  className="text-sm text-black hover:text-gray-700"
-                >
-                  Mot de passe oublié ?
-                </Link>
-              </div>
+        
 
               <button
                 type="submit"
@@ -180,8 +130,8 @@ const ConnexionPage = () => {
               >
                 {isLoading ? 'Connexion en cours...' : 'Je me connecte'}
               </button>
-            </form>
-          ) : (
+        
+         
             <div className="flex flex-col items-center space-y-4 py-6">
               <p className="text-black text-base text-center">Vous n'avez pas encore de compte ?<br/>Créez-en un pour profiter de tous nos services !</p>
               <Link href="/connexion/register">
@@ -190,7 +140,7 @@ const ConnexionPage = () => {
                 </button>
               </Link>
             </div>
-          )}
+        
 
           <div className="mt-6 text-center">
             <p className="text-black">

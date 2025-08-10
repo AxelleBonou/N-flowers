@@ -9,6 +9,7 @@ import Image from "next/image";
 import Link from "next/link";
 import { HiMenu, HiX } from "react-icons/hi";
 import { usePathname } from "next/navigation";
+import { useAuth } from "../../hooks/useAuth";
 
 interface Country {
   name: string;
@@ -25,6 +26,7 @@ const NavBar = () => {
 
   const pathname = usePathname();
   const isActive = (path: string) => pathname === path;
+  const { user, isLoading, logout } = useAuth();
 
   const countries: Country[] = [
     { name: "BENIN", flag: "https://flagcdn.com/w40/bj.png" },
@@ -127,30 +129,31 @@ const NavBar = () => {
             <MdLocationOn className="text-lg" />
             Mon magasin
           </Link>
-          {typeof window !== "undefined" && localStorage.getItem("user") ? (
+          {!isLoading && (
             <>
-              <span className="flex items-center gap-1">
-                <FaUser className="text-lg" />
-                {JSON.parse(localStorage.getItem("user") || "{}").data.user.info.name || "Profil"}
-              </span>
-              <button
-                className="ml-2 text-red-600 hover:underline"
-                onClick={() => {
-                  localStorage.removeItem("user");
-                  window.location.reload();
-                }}
-              >
-                Déconnexion
-              </button>
+              {user ? (
+                <>
+                  <span className="flex items-center gap-1">
+                    <FaUser className="text-lg" />
+                    {user.data.user.info.name || "Profil"}
+                  </span>
+                  <button
+                    className="ml-2 text-red-600 hover:underline"
+                    onClick={logout}
+                  >
+                    Déconnexion
+                  </button>
+                </>
+              ) : (
+                <Link
+                  href="/connexion"
+                  className={`flex items-center gap-1 cursor-pointer transition-colors px-2 py-1 rounded-md ${isActive('/connexion') ? 'bg-green-800 text-white' : 'hover:text-green-900'}`}
+                >
+                  <FaUser className="text-lg" />
+                  Se connecter
+                </Link>
+              )}
             </>
-          ) : (
-            <Link
-              href="/connexion"
-              className={`flex items-center gap-1 cursor-pointer transition-colors px-2 py-1 rounded-md ${isActive('/connexion') ? 'bg-green-800 text-white' : 'hover:text-green-900'}`}
-            >
-              <FaUser className="text-lg" />
-              Se connecter
-            </Link>
           )}
           <Link
             href="/panier"

@@ -69,7 +69,11 @@ export default function ExteriorPlantPage() {
 
           {/* Usage text */}
           <p className="mt-4 text-sm text-gray-700">
-            Elle est principalement utilisée comme plante d'intérieur décorative, appréciée pour son feuillage coloré et sa capacité à prospérer dans des conditions de faible luminosité. Elle est idéale pour apporter une touche de verdure dans les espaces intérieurs, tels que les bureaux, les salons ou les chambres.
+            Elle est principalement utilisée comme plante d'intérieur décorative, 
+            appréciée pour son feuillage coloré et sa capacité à prospérer dans des 
+            conditions de faible luminosité. Elle est idéale pour apporter une touche 
+            de verdure dans les espaces intérieurs, tels que les bureaux, les salons 
+            ou les chambres.
           </p>
 
           <button 
