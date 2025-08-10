@@ -79,10 +79,10 @@ export default function PlantDetailPage() {
           </p>
 
           <button 
-            onClick={() => isInteriorPlant ? console.log('Ajout au panier - Plante d\'intérieur') : router.push('/documentation/exterior')}
+            onClick={() => router.push('/achat/infocommande')}
             className="mt-6 bg-green-600 hover:bg-green-700 text-white px-4 py-2 rounded w-full sm:w-auto"
           >
-            Ajouter au panier
+            commander
           </button>
         </div>
       </div>

@@ -1,48 +1,109 @@
-'use client';
+"use client";
 import React, { useState } from "react";
 import Link from "next/link";
-import { FaArrowLeft, FaEye, FaEyeSlash } from 'react-icons/fa';
+import axios from "axios";
+import { FaArrowLeft, FaEye, FaEyeSlash } from "react-icons/fa";
 
 const RegisterPage = () => {
-  const [nom, setNom] = useState('');
-  const [prenom, setPrenom] = useState('');
-  const [email, setEmail] = useState('');
-  const [password, setPassword] = useState('');
-  const [confirmPassword, setConfirmPassword] = useState('');
+  const [nom, setNom] = useState("");
+  const [prenom, setPrenom] = useState("");
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const [confirmPassword, setConfirmPassword] = useState("");
   const [showPassword, setShowPassword] = useState(false);
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
-  const [error, setError] = useState('');
-  const [fullName, setFullName] = useState('');
-  const [currency, setCurrency] = useState('');
-  const [birthday, setBirthday] = useState('');
+  const [error, setError] = useState("");
+  const [fullName, setFullName] = useState("");
+  const [currency, setCurrency] = useState("");
+  const [birthday, setBirthday] = useState("");
   const [acceptPromo, setAcceptPromo] = useState(false);
   const [acceptTerms, setAcceptTerms] = useState(false);
-  const [activeTab, setActiveTab] = useState<'client' | 'new'>('new');
+  const [activeTab, setActiveTab] = useState<"client" | "new">("new");
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    setError('');
+    setError("");
     if (!acceptTerms) {
-      setError('Vous devez accepter les conditions générales.');
+      setError("Vous devez accepter les conditions générales.");
       return;
     }
     setIsLoading(true);
 
     if (password !== confirmPassword) {
-      setError('Les mots de passe ne correspondent pas.');
+      setError("Les mots de passe ne correspondent pas.");
       setIsLoading(false);
       return;
     }
 
     try {
       // Simulation d'une requête API
-      await new Promise(resolve => setTimeout(resolve, 2000));
+      await new Promise((resolve) => setTimeout(resolve, 2000));
       // Ici vous pouvez ajouter votre logique d'inscription
-      console.log('Inscription avec:', { fullName, email, currency, password, birthday, acceptPromo, acceptTerms });
+      console.log("Inscription avec:", {
+        fullName,
+        email,
+        currency,
+        password,
+        birthday,
+        acceptPromo,
+        acceptTerms,
+      });
+
+      let data = JSON.stringify({
+        name: fullName,
+        email: email,
+        password: password,
+        date_of_birth: birthday,
+        devise: currency,
+      });
+
+      let config = {
+        method: "post",
+        maxBodyLength: Infinity,
+        url: "http://localhost:3032/v1/users/register",
+        headers: {
+          Accept: "*/*",
+          "Accept-Language": "en-US,en;q=0.9,fr-FR;q=0.8,fr;q=0.7",
+          Connection: "keep-alive",
+          Origin: "null",
+          "Sec-Fetch-Dest": "empty",
+          "Sec-Fetch-Mode": "cors",
+          "Sec-Fetch-Site": "cross-site",
+          "User-Agent":
+            "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/137.0.0.0 Safari/537.36",
+          "sec-ch-ua":
+            '"Google Chrome";v="137", "Chromium";v="137", "Not/A)Brand";v="24"',
+          "sec-ch-ua-mobile": "?0",
+          "sec-ch-ua-platform": '"Windows"',
+          "Content-Type": "application/json",
+        },
+        data: data,
+      };
+
+      axios
+        .request(config)
+        .then((response: { data: any }) => {
+            console.log(JSON.stringify(response.data));
+            window.location.href = "/connexion";
+        })
+        .catch((error: any) => {
+          if (error.response) {
+            // La requête a été faite et le serveur a répondu avec un code d'état
+            if (error.response.status === 409) {
+              setError("Email déjà utilisé");
+            } else {
+              setError("Erreur lors de l'inscription.");
+            }
+          } else {
+            // Erreur lors de la configuration de la requête
+            setError("Erreur de connexion au serveur.");
+          }
+          console.log(error);
+        });
       // Redirection ou gestion de l'inscription
     } catch (err) {
-      setError('Une erreur est survenue. Veuillez réessayer.');
+      setError("Une erreur est survenue. Veuillez réessayer.");
     } finally {
       setIsLoading(false);
     }
@@ -63,15 +124,23 @@ const RegisterPage = () => {
           <div className="flex mb-6 bg-gray-100 p-1 rounded-md">
             <button
               type="button"
-              className={`flex-1 py-1 px-2 font-medium text-sm h-9 rounded transition-colors duration-150 ${activeTab === 'client' ? 'bg-green-600 text-white' : 'bg-white text-black'}`}
-              onClick={() => setActiveTab('client')}
+              className={`flex-1 py-1 px-2 font-medium text-sm h-9 rounded transition-colors duration-150 ${
+                activeTab === "client"
+                  ? "bg-green-600 text-white"
+                  : "bg-white text-black"
+              }`}
+              onClick={() => setActiveTab("client")}
             >
               Déjà client(e) ?
             </button>
             <button
               type="button"
-              className={`flex-1 py-1 px-2 font-medium text-sm h-9 rounded transition-colors duration-150 ${activeTab === 'new' ? 'bg-green-600 text-white' : 'bg-white text-black'}`}
-              onClick={() => setActiveTab('new')}
+              className={`flex-1 py-1 px-2 font-medium text-sm h-9 rounded transition-colors duration-150 ${
+                activeTab === "new"
+                  ? "bg-green-600 text-white"
+                  : "bg-white text-black"
+              }`}
+              onClick={() => setActiveTab("new")}
             >
               Pas encore client(e) ?
             </button>
@@ -110,20 +179,34 @@ const RegisterPage = () => {
                 id="currency"
                 name="currency"
                 required
-                className={`w-full px-3 py-2 border border-gray-300 focus:outline-none focus:ring-2 focus:ring-green-500 bg-white appearance-none ${!currency ? 'text-gray-400' : 'text-black'}`}
+                className={`w-full px-3 py-2 border border-gray-300 focus:outline-none focus:ring-2 focus:ring-green-500 bg-white appearance-none ${
+                  !currency ? "text-gray-400" : "text-black"
+                }`}
                 value={currency}
                 onChange={(e) => setCurrency(e.target.value)}
                 disabled={isLoading}
               >
-                <option value="" disabled className="text-gray-400">Devise *</option>
+                <option value="" disabled className="text-gray-400">
+                  Devise *
+                </option>
                 <option value="EUR">EUR</option>
                 <option value="USD">USD</option>
                 <option value="FCFA">FCFA</option>
               </select>
               {/* Chevron */}
               <span className="pointer-events-none absolute inset-y-0 right-0 flex items-center pr-3">
-                <svg className="h-5 w-5 text-gray-400" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" d="M19 9l-7 7-7-7" />
+                <svg
+                  className="h-5 w-5 text-gray-400"
+                  fill="none"
+                  stroke="currentColor"
+                  strokeWidth="2"
+                  viewBox="0 0 24 24"
+                >
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    d="M19 9l-7 7-7-7"
+                  />
                 </svg>
               </span>
             </div>
@@ -180,7 +263,9 @@ const RegisterPage = () => {
               </button>
             </div>
             <div>
-              <label className="block text-black font-medium mb-1">Recevez un cadeau le jour de votre anniversaire</label>
+              <label className="block text-black font-medium mb-1">
+                Recevez un cadeau le jour de votre anniversaire
+              </label>
               <input
                 id="birthday"
                 name="birthday"
@@ -202,7 +287,8 @@ const RegisterPage = () => {
                   className="mr-2 accent-green-600 w-5 h-5 border-2 border-green-600 focus:ring-2 focus:ring-green-500"
                   disabled={isLoading}
                 />
-                Je souhaite recevoir par email les actualités promotionnelles, les offres et conseils de Jardin et Saisons
+                Je souhaite recevoir par email les actualités promotionnelles,
+                les offres et conseils de Jardin et Saisons
               </label>
               <label className="flex items-center text-sm text-black">
                 <input
@@ -213,12 +299,11 @@ const RegisterPage = () => {
                   required
                   disabled={isLoading}
                 />
-                J'accepte les conditions générales et la politique de confidentialité
+                J'accepte les conditions générales et la politique de
+                confidentialité
               </label>
             </div>
-            {error && (
-              <p className="text-red-600 text-sm">{error}</p>
-            )}
+            {error && <p className="text-red-600 text-sm">{error}</p>}
             <button
               type="submit"
               disabled={isLoading}
@@ -231,7 +316,10 @@ const RegisterPage = () => {
           <div className="mt-6 text-center">
             <p className="text-black text-base">
               Déjà un compte ?{" "}
-              <Link href="/connexion" className="text-green-600 hover:text-green-700 font-medium">
+              <Link
+                href="/connexion"
+                className="text-green-600 hover:text-green-700 font-medium"
+              >
                 Connectez-vous
               </Link>
             </p>
@@ -242,4 +330,4 @@ const RegisterPage = () => {
   );
 };
 
-export default RegisterPage; 
+export default RegisterPage;

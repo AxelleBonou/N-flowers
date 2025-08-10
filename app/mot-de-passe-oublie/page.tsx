@@ -2,6 +2,7 @@
 import { useState } from 'react';
 import Link from 'next/link';
 import { FaArrowLeft } from 'react-icons/fa';
+import axios from "axios";
 
 export default function MotDePasseOublie() {
   const [email, setEmail] = useState('');
@@ -16,12 +17,54 @@ export default function MotDePasseOublie() {
 
     try {
       // Simulation d'une requête API
-      await new Promise(resolve => setTimeout(resolve, 2000));
+      let data = JSON.stringify({
+        "email": email
+      });
+
+      let config = {
+        method: 'post',
+        maxBodyLength: Infinity,
+        url: 'http://localhost:3032/v1/users/forgot-password',
+        headers: { 
+          'Accept': '*/*', 
+          'Accept-Language': 'en-US,en;q=0.9,fr-FR;q=0.8,fr;q=0.7', 
+          'Connection': 'keep-alive', 
+          'Origin': 'null', 
+          'Sec-Fetch-Dest': 'empty', 
+          'Sec-Fetch-Mode': 'cors', 
+          'Sec-Fetch-Site': 'cross-site', 
+          'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/137.0.0.0 Safari/537.36', 
+          'sec-ch-ua': '"Google Chrome";v="137", "Chromium";v="137", "Not/A)Brand";v="24"', 
+          'sec-ch-ua-mobile': '?0', 
+          'sec-ch-ua-platform': '"Windows"', 
+          'Content-Type': 'application/json'
+        },
+        data : data
+      };
+
+      axios.request(config)
+        .then((response) => {
+          console.log(JSON.stringify(response.data));
+          // Ici vous pouvez gérer la réponse, par exemple afficher un message de succès
+          window.location.href = "/connexion"; // Redirection vers la page de connexion
+        })
+        .catch((error) => {
+          if (error.response) {
+            if (error.response.status === 404) {
+              setError("Email non trouvé");
+            } else {
+              setError('Une erreur est survenue. Veuillez vérifier votre adresse e-mail.');
+            }
+          } else {
+            // Erreur lors de la configuration de la requête
+            setError('Une erreur est survenue. Veuillez réessayer plus tard.');
+          }
+          console.log(error);
+        });
+
       
       // Ici vous pouvez ajouter votre logique de réinitialisation
       console.log('Réinitialisation pour:', email);
-      
-      setIsSubmitted(true);
     } catch (err) {
       setError('Une erreur est survenue. Veuillez réessayer.');
     } finally {
@@ -86,6 +129,7 @@ export default function MotDePasseOublie() {
               disabled={isLoading}
             />
           </div>
+                      {error && <p className="text-red-600 text-sm">{error}</p>}
 
           <button
             type="submit"
@@ -97,7 +141,7 @@ export default function MotDePasseOublie() {
         </form>
       </div>
       
-      {/* Lien de retour dans l'angle inférieur gauche */}
+      {/* Lien de retour  */}
       <div className="absolute bottom-6 left-6">
         <Link 
           href="/connexion" 

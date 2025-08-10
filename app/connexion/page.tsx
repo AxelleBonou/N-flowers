@@ -2,6 +2,7 @@
 import React, { useState } from "react";
 import Link from "next/link";
 import { FaArrowLeft, FaEye, FaEyeSlash } from 'react-icons/fa';
+import axios from "axios";
 
 const ConnexionPage = () => {
   const [email, setEmail] = useState('');
@@ -20,10 +21,54 @@ const ConnexionPage = () => {
       // Simulation d'une requête API
       await new Promise(resolve => setTimeout(resolve, 2000));
       
-      // Ici vous pouvez ajouter votre logique de connexion
-      console.log('Connexion pour:', email);
-      
-      // Redirection ou gestion de la connexion
+      let data = JSON.stringify({
+        "email": email,
+        "password": password
+      });
+
+      let config = {
+        method: 'post',
+        maxBodyLength: Infinity,
+        url: 'http://localhost:3032/v1/users/login',
+        headers: { 
+          'Accept': '*/*', 
+          'Accept-Language': 'en-US,en;q=0.9,fr-FR;q=0.8,fr;q=0.7', 
+          'Connection': 'keep-alive', 
+          'Origin': 'null', 
+          'Sec-Fetch-Dest': 'empty', 
+          'Sec-Fetch-Mode': 'cors', 
+          'Sec-Fetch-Site': 'cross-site', 
+          'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/137.0.0.0 Safari/537.36', 
+          'sec-ch-ua': '"Google Chrome";v="137", "Chromium";v="137", "Not/A)Brand";v="24"', 
+          'sec-ch-ua-mobile': '?0', 
+          'sec-ch-ua-platform': '"Windows"', 
+          'Content-Type': 'application/json'
+        },
+        data : data
+      };
+
+      axios.request(config)
+      .then((response) => {
+        console.log(JSON.stringify(response.data));
+        // Stocker les infos utilisateur dans le localStorage ou context
+        localStorage.setItem('user', JSON.stringify(response.data));
+        // Redirection vers la page d'accueil ou dashboard après connexion réussie
+        window.location.href = "/"; // Remplacez par la route de votre choix
+      })
+      .catch((error) => {
+        if (error.response) {
+          // La requête a été faite et le serveur a répondu avec un code d'état
+          // qui sort de la plage des 2xx
+          setError("Identifiants incorrects. Veuillez vérifier votre email et mot de passe.");
+        } else if (error.request) {
+          // La requête a été faite mais aucune réponse n'a été reçue
+          setError('Aucune réponse du serveur. Veuillez réessayer plus tard.');
+        } else {
+          // Quelque chose s'est passé lors de la configuration de la requête
+          setError('Erreur de configuration de la requête. Veuillez réessayer.');
+        }
+        console.log(error);
+      });
     } catch (err) {
       setError('Une erreur est survenue. Veuillez réessayer.');
     } finally {

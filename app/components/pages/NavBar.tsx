@@ -127,13 +127,31 @@ const NavBar = () => {
             <MdLocationOn className="text-lg" />
             Mon magasin
           </Link>
-          <Link
-            href="/connexion"
-            className={`flex items-center gap-1 cursor-pointer transition-colors px-2 py-1 rounded-md ${isActive('/connexion') ? 'bg-green-800 text-white' : 'hover:text-green-900'}`}
-          >
-            <FaUser className="text-lg" />
-            Se connecter
-          </Link>
+          {typeof window !== "undefined" && localStorage.getItem("user") ? (
+            <>
+              <span className="flex items-center gap-1">
+                <FaUser className="text-lg" />
+                {JSON.parse(localStorage.getItem("user") || "{}").data.user.info.name || "Profil"}
+              </span>
+              <button
+                className="ml-2 text-red-600 hover:underline"
+                onClick={() => {
+                  localStorage.removeItem("user");
+                  window.location.reload();
+                }}
+              >
+                Déconnexion
+              </button>
+            </>
+          ) : (
+            <Link
+              href="/connexion"
+              className={`flex items-center gap-1 cursor-pointer transition-colors px-2 py-1 rounded-md ${isActive('/connexion') ? 'bg-green-800 text-white' : 'hover:text-green-900'}`}
+            >
+              <FaUser className="text-lg" />
+              Se connecter
+            </Link>
+          )}
           <Link
             href="/panier"
             className={`flex items-center gap-1 cursor-pointer transition-colors px-2 py-1 rounded-md ${isActive('/panier') ? 'bg-green-800 text-white' : 'hover:text-green-900'}`}

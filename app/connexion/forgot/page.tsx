@@ -11,16 +11,19 @@ export default function ForgotPassword() {
     e.preventDefault();
     // Logique de réinitialisation du mot de passe à implémenter
     console.log('Réinitialisation pour:', email);
+    router.push('/connexion/forgotanswer');
   };
 
   return (
     <div className="min-h-screen bg-gray-100 flex flex-col justify-center py-12 sm:px-6 lg:px-8">
       <div className="sm:mx-auto sm:w-full sm:max-w-md">
         <h2 className="mt-6 text-center text-3xl font-extrabold text-gray-900">
-          Mot de passe oublié
+          Mot de passe oublié?
         </h2>
         <p className="mt-2 text-center text-sm text-gray-600">
-          Entrez votre adresse email pour recevoir un lien de réinitialisation
+        Veuillez renseigner l'adresse e-mail que vous avez utilisée à la
+        création de votre compte. Vous recevrez un lien temporaire
+        pour réinitialiser votre mot de passe.
         </p>
       </div>
 
@@ -50,7 +53,7 @@ export default function ForgotPassword() {
                 type="submit"
                 className="w-full flex justify-center py-2 px-4 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-green-600 hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-green-500"
               >
-                Envoyer le lien de réinitialisation
+                Valider
               </button>
             </div>
           </form>
