@@ -77,10 +77,10 @@ export default function ExteriorPlantPage() {
           </p>
 
           <button 
-            onClick={() => router.push('/achat/infocommande')}
+            onClick={() => router.push('/app/panier')}
             className="mt-6 bg-green-600 hover:bg-green-700 text-white px-4 py-2 rounded w-full sm:w-auto"
           >
-            commander
+           ajouter au panier
           </button>
         </div>
       </div>

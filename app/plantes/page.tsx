@@ -320,30 +320,54 @@ const Page = () => {
 
     return (
       <div className="bg-white rounded-lg shadow-md p-4">
-        <div className="relative h-48 mb-4">
-          <Image
-            src={product.images[currentImageIndex]}
-            alt={product.nom}
-            fill
-            className="object-contain"
-          />
+        <div className="flex flex-col h-full">
+          {/* Image du produit */}
+          <div className="flex justify-center mb-4">
+            <div className="relative w-24 h-24">
+              <Image
+                src={product.images[currentImageIndex]}
+                alt={product.nom}
+                fill
+                className="object-contain"
+              />
+            </div>
+          </div>
+          
+          {/* Nom du produit */}
+          <h3 className="font-semibold text-gray-800 text-sm text-center mb-2 leading-tight">
+            {product.nom}
+          </h3>
+          
+          {/* Description */}
+          <p className="text-gray-600 text-xs text-center mb-2">
+            Plante d'intérieur
+          </p>
+          
+          {/* Note et avis */}
+          <div className="flex items-center justify-center mb-2">
+            <div className="flex items-center">
+              {[...Array(5)].map((_, i) => (
+                <span key={i} className="text-yellow-400 text-xs">
+                  {i < product.note ? '★' : '☆'}
+                </span>
+              ))}
+            </div>
+            <span className="text-gray-500 text-xs ml-1">({product.avis} avis)</span>
+          </div>
+          
+          {/* Prix */}
+          <div className="text-center mb-4">
+            <span className="font-bold text-gray-800">{product.prix}</span>
+          </div>
+          
+          {/* Bouton Ajouter au panier */}
+          <button
+            onClick={handleAddToCart}
+            className="mt-auto bg-green-600 hover:bg-green-700 text-white py-2 px-4 rounded text-sm font-medium transition-colors"
+          >
+            Ajouter au panier
+          </button>
         </div>
-        <h3 className="text-lg font-semibold mb-2">{product.nom}</h3>
-        <div className="flex items-center mb-2">
-          {[...Array(5)].map((_, i) => (
-            <span key={i} className="text-yellow-400">
-              {i < product.note ? '★' : '☆'}
-            </span>
-          ))}
-          <span className="text-gray-600 text-sm ml-2">({product.avis} avis)</span>
-        </div>
-        <p className="text-green-600 font-bold mb-4">{product.prix}</p>
-        <button
-          onClick={handleAddToCart}
-          className="w-full bg-green-600 text-white py-2 rounded hover:bg-green-700"
-        >
-          Ajouter au panier
-        </button>
       </div>
     );
   };

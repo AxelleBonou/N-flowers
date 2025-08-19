@@ -50,7 +50,7 @@ const NavBar = () => {
       </div>
 
       {/* Barre principale */}
-      <div className="flex items-center px-4 md:px-6 py-4 border-b relative">
+      <div className="flex items-center px-2 sm:px-4 md:px-6 py-2 sm:py-4 border-b relative">
         {/* Partie gauche */}
         <div className="hidden md:flex items-center gap-4 w-1/3">
           <div className="relative">
@@ -103,28 +103,27 @@ const NavBar = () => {
 
         {/* Logo + Accueil */}
         <div className="flex flex-col items-center justify-center flex-grow">
-  <Link href="/" className="flex flex-col items-center">
-    <Image
-      src="/images/logo.png"
-      alt="Logo"
-      width={120}
-      height={48}
-      className="object-contain h-8 w-auto md:h-12"
-    />
-  </Link>
-  <Link
-    href="/"
-
-  >
-    
-  </Link>
-</div>
+          <Link href="/" className="flex flex-col items-center">
+            <Image
+              src="/images/logo.png"
+              alt="Logo"
+              width={120}
+              height={48}
+              className="object-contain h-6 w-auto sm:h-8 md:h-10 lg:h-12 transition-all duration-200"
+              priority
+            />
+          </Link>
+        </div>
 
         {/* Actions desktop */}
         <div className="hidden md:flex items-center justify-end gap-6 w-1/3 text-sm font-medium">
           <Link
             href="/mon-magasin"
-            className={`flex items-center gap-1 cursor-pointer transition-colors px-2 py-1 rounded-md ${isActive('/mon-magasin') ? 'bg-green-800 text-white' : 'hover:text-green-900'}`}
+            className={`flex items-center gap-1 cursor-pointer transition-colors px-2 py-1 rounded-md ${
+              isActive("/mon-magasin")
+                ? "bg-green-800 text-white"
+                : "hover:text-green-900"
+            }`}
           >
             <MdLocationOn className="text-lg" />
             Mon magasin
@@ -133,10 +132,13 @@ const NavBar = () => {
             <>
               {user ? (
                 <>
-                  <span className="flex items-center gap-1">
+                  <Link
+                    href="/profil"
+                    className="flex items-center gap-1 cursor-pointer transition-colors px-2 py-1 rounded-md hover:text-green-900"
+                  >
                     <FaUser className="text-lg" />
                     {user.data.user.info.name || "Profil"}
-                  </span>
+                  </Link>
                   <button
                     className="ml-2 text-red-600 hover:underline"
                     onClick={logout}
@@ -147,7 +149,11 @@ const NavBar = () => {
               ) : (
                 <Link
                   href="/connexion"
-                  className={`flex items-center gap-1 cursor-pointer transition-colors px-2 py-1 rounded-md ${isActive('/connexion') ? 'bg-green-800 text-white' : 'hover:text-green-900'}`}
+                  className={`flex items-center gap-1 cursor-pointer transition-colors px-2 py-1 rounded-md ${
+                    isActive("/connexion")
+                      ? "bg-green-800 text-white"
+                      : "hover:text-green-900"
+                  }`}
                 >
                   <FaUser className="text-lg" />
                   Se connecter
@@ -157,7 +163,11 @@ const NavBar = () => {
           )}
           <Link
             href="/panier"
-            className={`flex items-center gap-1 cursor-pointer transition-colors px-2 py-1 rounded-md ${isActive('/panier') ? 'bg-green-800 text-white' : 'hover:text-green-900'}`}
+            className={`flex items-center gap-1 cursor-pointer transition-colors px-2 py-1 rounded-md ${
+              isActive("/panier")
+                ? "bg-green-800 text-white"
+                : "hover:text-green-900"
+            }`}
           >
             <FaShoppingCart className="text-lg" />
             Panier
@@ -166,11 +176,15 @@ const NavBar = () => {
 
         {/* Menu hamburger */}
         <button
-          className="md:hidden p-2 ml-auto"
+          className="md:hidden p-1 sm:p-2 ml-2 sm:ml-auto"
           onClick={() => setMobileMenuOpen((v) => !v)}
           aria-label="Ouvrir le menu"
         >
-          {mobileMenuOpen ? <HiX size={28} /> : <HiMenu size={28} />}
+          {mobileMenuOpen ? (
+            <HiX size={24} className="sm:w-7 sm:h-7" />
+          ) : (
+            <HiMenu size={24} className="sm:w-7 sm:h-7" />
+          )}
         </button>
       </div>
 
@@ -267,7 +281,10 @@ const NavBar = () => {
               {[
                 { href: "/", label: "Accueil" },
                 { href: "/plantes", label: "Plantes" },
-                { href: "/amenagement-exterieur", label: "Aménagement extérieur" },
+                {
+                  href: "/amenagement-exterieur",
+                  label: "Aménagement extérieur",
+                },
                 { href: "/jardinage", label: "Jardinage" },
                 { href: "/maison-decoration", label: "Maison & Décoration" },
                 { href: "/fleurs-vertus", label: "Fleurs & Vertus" },
@@ -292,7 +309,11 @@ const NavBar = () => {
             <div className="flex flex-col gap-3 mt-6 border-t pt-4">
               <Link
                 href="/mon-magasin"
-                className={`flex items-center gap-2 hover:text-green-900 transition-colors px-2 py-1 rounded-md ${isActive('/mon-magasin') ? 'bg-green-800 text-white' : 'hover:text-green-900'}`}
+                className={`flex items-center gap-2 hover:text-green-900 transition-colors px-2 py-1 rounded-md ${
+                  isActive("/mon-magasin")
+                    ? "bg-green-800 text-white"
+                    : "hover:text-green-900"
+                }`}
                 onClick={() => setMobileMenuOpen(false)}
               >
                 <MdLocationOn className="text-lg" />
@@ -300,7 +321,11 @@ const NavBar = () => {
               </Link>
               <Link
                 href="/connexion"
-                className={`flex items-center gap-2 hover:text-green-900 transition-colors px-2 py-1 rounded-md ${isActive('/connexion') ? 'bg-green-800 text-white' : 'hover:text-green-900'}`}
+                className={`flex items-center gap-2 hover:text-green-900 transition-colors px-2 py-1 rounded-md ${
+                  isActive("/connexion")
+                    ? "bg-green-800 text-white"
+                    : "hover:text-green-900"
+                }`}
                 onClick={() => setMobileMenuOpen(false)}
               >
                 <FaUser className="text-lg" />
@@ -308,7 +333,11 @@ const NavBar = () => {
               </Link>
               <Link
                 href="/panier"
-                className={`flex items-center gap-2 hover:text-green-900 transition-colors px-2 py-1 rounded-md ${isActive('/panier') ? 'bg-green-800 text-white' : 'hover:text-green-900'}`}
+                className={`flex items-center gap-2 hover:text-green-900 transition-colors px-2 py-1 rounded-md ${
+                  isActive("/panier")
+                    ? "bg-green-800 text-white"
+                    : "hover:text-green-900"
+                }`}
                 onClick={() => setMobileMenuOpen(false)}
               >
                 <FaShoppingCart className="text-lg" />

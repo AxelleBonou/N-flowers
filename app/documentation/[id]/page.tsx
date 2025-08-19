@@ -79,10 +79,17 @@ export default function PlantDetailPage() {
           </p>
 
           <button 
-            onClick={() => router.push('/achat/infocommande')}
+            onClick={() => {
+              // Ici vous pourriez ajouter la logique pour ajouter au panier
+              // Par exemple : addToCart(plantId, productName, price);
+              console.log(`Produit ${plantId} ajouté au panier`);
+              
+              // Rediriger vers la page panier
+              router.push('/panier');
+            }}
             className="mt-6 bg-green-600 hover:bg-green-700 text-white px-4 py-2 rounded w-full sm:w-auto"
           >
-            commander
+            Ajouter au panier
           </button>
         </div>
       </div>

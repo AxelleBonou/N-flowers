@@ -4,8 +4,10 @@ import React, { useState } from "react";
 import Image from "next/image";
 import { FaStar, FaRegStar } from "react-icons/fa";
 import { IoIosArrowBack, IoIosArrowForward } from "react-icons/io";
+import { useRouter } from "next/navigation";
 
 interface Product {
+  id?: number;
   image: string;
   name: string;
   desc: string;
@@ -69,15 +71,16 @@ function ProductCarousel({ title, highlight, products }: ProductCarouselProps) {
 
 // --- Données exemples ---
 const produitsRecommandes: Product[] = [
-  { image: "/images/engrais1.png", name: "Engrais de croissance sang et corne 800 g", desc: "Cet engrais de croissance, à base de sang et de...", price: 4000, rating: 5 },
-  { image: "/images/engrais2.png", name: "Engrais de croissance anti-brunissement", desc: "Cet engrais de croissance, à base de sang et de...", price: 4200, rating: 4 },
-  { image: "/images/engrais3.png", name: "Engrais de croissance sang et corne 800 g", desc: "Cet engrais de croissance, à base de sang et de...", price: 3500, rating: 5 },
-  { image: "/images/engrais4.png", name: "Engrais de croissance corne torrifiée 800 g", desc: "Cet engrais de croissance, à base de sang et de...", price: 4000, rating: 5 },
-  { image: "/images/engrais5.png", name: "Engrais de croissance sang et corne 800 g", desc: "Cet engrais de croissance, à base de sang et de...", price: 3000, rating: 5 },
+  { id: 5, image: "/images/engrais1.png", name: "Engrais de croissance sang et corne 800 g", desc: "Cet engrais de croissance, à base de sang et de...", price: 4000, rating: 5 },
+  { id: 6, image: "/images/engrais2.png", name: "Engrais de croissance anti-brunissement", desc: "Cet engrais de croissance, à base de sang et de...", price: 4200, rating: 4 },
+  { id: 7, image: "/images/engrais3.png", name: "Engrais de croissance sang et corne 800 g", desc: "Cet engrais de croissance, à base de sang et de...", price: 3500, rating: 5 },
+  { id: 8, image: "/images/engrais4.png", name: "Engrais de croissance corne torrifiée 800 g", desc: "Cet engrais de croissance, à base de sang et de...", price: 4000, rating: 5 },
+  { id: 9, image: "/images/engrais5.png", name: "Engrais de croissance sang et corne 800 g", desc: "Cet engrais de croissance, à base de sang et de...", price: 3000, rating: 5 },
 ];
 
 const selectionMoment = [
   {
+    id: 10,
     image: "/images/secateur.png",
     name: "Sécateur ergo bahco pxs2 pour droitier taille S",
     desc: "",
@@ -85,6 +88,7 @@ const selectionMoment = [
     rating: 5,
   },
   {
+    id: 11,
     image: "/images/rouleau.png",
     name: "Rouleau de jardin",
     desc: "",
@@ -92,6 +96,7 @@ const selectionMoment = [
     rating: 4,
   },
   {
+    id: 12,
     image: "/images/outils.png",
     name: "Outils de jardinage indispensables pour la taille",
     desc: "",
@@ -99,6 +104,7 @@ const selectionMoment = [
     rating: 5,
   },
   {
+    id: 13,
     image: "/images/tondeuse1.png",
     name: "Tondeuse à gazon manuelle",
     desc: "",
@@ -106,6 +112,7 @@ const selectionMoment = [
     rating: 5,
   },
   {
+    id: 14,
     image: "/images/tondeuse2.png",
     name: "Tondeuse thermique tractée de coupe 43cm",
     desc: "",
@@ -116,6 +123,7 @@ const selectionMoment = [
 
 const products = [
   {
+    id: 1,
     image: "/images/plante1.png",
     name: "Phalaenopsis – Orchidée rose",
     desc: "Plante d'intérieur",
@@ -123,6 +131,7 @@ const products = [
     oldPrice: 6000,
   },
   {
+    id: 2,
     image: "/images/plante2.png",
     name: "Phalaenopsis – Orchidée",
     desc: "Plante d'intérieur",
@@ -130,6 +139,7 @@ const products = [
     oldPrice: 6000,
   },
   {
+    id: 3,
     image: "/images/plante3.png",
     name: "Phalaenopsis – rose",
     desc: "Plante d'intérieur",
@@ -137,6 +147,7 @@ const products = [
     oldPrice: 6000,
   },
   {
+    id: 4,
     image: "/images/plante4.png",
     name: "Phalaenopsis – Orchidée",
     desc: "Plante d'intérieur",
@@ -146,6 +157,7 @@ const products = [
 ];
 
 const Acceuil = () => {
+  const router = useRouter();
   const avis = [
     {
       rating: 5,
@@ -273,7 +285,10 @@ const Acceuil = () => {
     </div>
   </div>
 
-  <button className="bg-green-600 text-white py-2 mt-4 rounded hover:bg-green-700 w-full">
+  <button 
+    onClick={() => router.push(`/documentation/${prod.id}`)}
+    className="bg-green-600 text-white py-2 mt-4 rounded hover:bg-green-700 w-full"
+  >
     Ajouter au panier
   </button>
 </div>
@@ -394,7 +409,10 @@ const Acceuil = () => {
                   </div>
                   <p className="text-gray-500 text-xs text-center mt-1 mb-2 line-clamp-2">{prod.desc}</p>
                   <div className="mt-1 mb-2 font-bold">{prod.price}f</div>
-                  <button className="bg-green-600 text-white py-2 rounded hover:bg-green-700 w-full text-sm">
+                  <button 
+                    onClick={() => router.push(`/documentation/${prod.id}`)}
+                    className="bg-green-600 text-white py-2 rounded hover:bg-green-700 w-full text-sm"
+                  >
                     Ajouter au panier
                   </button>
                 </div>
@@ -467,7 +485,10 @@ const Acceuil = () => {
     {prod.desc}
   </p>
 
-  <button className="bg-green-700 text-white py-2 rounded hover:bg-green-900 w-full text-sm font-semibold mt-auto">
+  <button 
+    onClick={() => router.push(`/documentation/${prod.id}`)}
+    className="bg-green-700 text-white py-2 rounded hover:bg-green-900 w-full text-sm font-semibold mt-auto"
+  >
     Ajouter au panier
   </button>
 </div>

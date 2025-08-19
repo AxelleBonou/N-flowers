@@ -27,7 +27,14 @@ const InfoCommande = () => {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setError("");
-    if (!form.nom || !form.adresse || !form.codePostal || !form.pays || !form.ville || !form.telephone) {
+    if (
+      !form.nom ||
+      !form.adresse ||
+      !form.codePostal ||
+      !form.pays ||
+      !form.ville ||
+      !form.telephone
+    ) {
       setError("Tous les champs sont obligatoires.");
       return;
     }
@@ -39,22 +46,23 @@ const InfoCommande = () => {
       }
       const res = await fetch("http://localhost:3032/v1/address", {
         method: "POST",
-        headers: { 
+        headers: {
           "Content-Type": "application/json",
-          "Authorization": `Bearer ${token ? JSON.parse(token) : ""}`
-
+          Authorization: `Bearer ${token ? JSON.parse(token) : ""}`,
         },
         body: JSON.stringify(form),
       });
       if (!res.ok) {
         if (res.status == 401) {
           // Rediriger vers la page de connexion avec un message
-          router.push("/connexion?message=Vous devez être connecté pour continuer");
+          router.push(
+            "/connexion?message=Vous devez être connecté pour continuer"
+          );
           return;
         }
         throw new Error("Erreur lors de l'enregistrement");
       }
-      router.push("/achat/confirmadrsse"); 
+      router.push("/achat/confirmadrsse");
     } catch (err: any) {
       setError(err.message || "Erreur inconnue");
     } finally {
@@ -63,20 +71,25 @@ const InfoCommande = () => {
   };
 
   const handleBack = () => {
-    router.push("/connexion");
+    router.back();
   };
 
   return (
     <div className="max-w-2xl mx-auto mt-10 p-6 bg-white rounded-lg shadow">
       <div className="flex items-center mb-8">
-        <div className="w-10 h-10 rounded-full bg-green-700 text-white flex items-center justify-center font-bold text-lg mr-3">01</div>
+        <div className="w-10 h-10 rounded-full bg-green-700 text-white flex items-center justify-center font-bold text-lg mr-3">
+          01
+        </div>
         <span className="text-green-700 font-bold text-xl mr-8">Adresse</span>
         <div className="flex-1 h-0.5 bg-gray-200 mr-4" />
-        <div className="w-10 h-10 rounded-full bg-gray-200 text-gray-400 flex items-center justify-center font-bold text-lg mr-3">02</div>
+        <div className="w-10 h-10 rounded-full bg-gray-200 text-gray-400 flex items-center justify-center font-bold text-lg mr-3">
+          02
+        </div>
         <span className="text-gray-400 font-bold text-xl">Paiement</span>
       </div>
       <p className="mb-6 text-sm text-gray-700">
-        L'adresse sélectionnée sera utilisée à la fois comme adresse personnelle (pour la facturation) et comme adresse de livraison.
+        L'adresse sélectionnée sera utilisée à la fois comme adresse personnelle
+        (pour la facturation) et comme adresse de livraison.
       </p>
       <form onSubmit={handleSubmit}>
         <div className="mb-4">
@@ -153,7 +166,9 @@ const InfoCommande = () => {
             onChange={handleChange}
             className="mr-2 accent-green-700"
           />
-          <label className="text-sm">Utiliser aussi cette adresse pour la facturation</label>
+          <label className="text-sm">
+            Utiliser aussi cette adresse pour la facturation
+          </label>
         </div>
         {error && <div className="text-red-600 mb-4 text-sm">{error}</div>}
         <div className="flex justify-between items-center mt-6">
